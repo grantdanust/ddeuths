@@ -1,0 +1,569 @@
+MONITORY-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    OBJECT-IDENTITY, MODULE-IDENTITY, NOTIFICATION-TYPE, enterprises, Integer32, Unsigned32
+        FROM SNMPv2-SMI
+    OBJECT-TYPE
+        FROM RFC-1212
+    DisplayString
+        FROM SNMPv2-TC;
+
+
+ytek MODULE-IDENTITY
+    LAST-UPDATED    "202304220000Z"         -- 22 de abril de 2023
+    ORGANIZATION    "Ytek Eletronica Ltda"
+    CONTACT-INFO    
+                "Ytek Eletronica Ltda
+                 Tel.: +55 31 33333333
+                 Tel.: +55 31 44444444
+                 email: ytek @ytek.com.br"
+    DESCRIPTION
+                "Modulo MIB para o equipamento Monitory"
+    REVISION
+                "202304220000Z"             -- 22 de abril de 2022
+    DESCRIPTION
+                "Versao inicial do modulo Mib"
+
+    ::= { enterprises 36582 }
+
+monitory OBJECT-IDENTITY
+    STATUS current
+    DESCRIPTION  " "
+    ::= { ytek 1 }
+
+identificacao OBJECT-IDENTITY
+    STATUS current
+    DESCRIPTION  " "
+    ::= { monitory 1 }
+
+telemetria OBJECT-IDENTITY
+    STATUS current
+    DESCRIPTION  " "
+    ::= { monitory 2 }   
+        
+config OBJECT-IDENTITY
+    STATUS current
+    DESCRIPTION  " "
+    ::= { monitory 3 }   
+
+reles OBJECT-IDENTITY
+    STATUS current
+    DESCRIPTION  " "
+    ::= { monitory 4 }
+
+alarmes OBJECT-IDENTITY
+    STATUS current
+    DESCRIPTION  "Alarmes do sistema"
+    ::= { monitory 5 }
+
+-- identificacao
+
+	firmVersion OBJECT-TYPE
+		SYNTAX	        OCTET STRING
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"Versao do firmware"
+		::= { identificacao 1 }
+
+-- telemetria
+    --entityPhysical OBJECT IDENTIFIER ::=  {}
+
+    umidade OBJECT-TYPE
+        SYNTAX          Integer32 (0..100)
+        MAX-ACCESS      read-only
+        STATUS          current
+        DESCRIPTION     "Valor da umidade momentanea do ambiente 
+                         Range de 0 a 100%."
+        ::= { telemetria 1 }
+
+    temperatura OBJECT-TYPE
+        SYNTAX          Integer32 (0..100)
+        MAX-ACCESS      read-only
+        STATUS          current
+        DESCRIPTION     "Valor da Temperatura momentanea do ambiente
+                         Range de 0 a graus 100 Celsius."       
+        ::= { telemetria 2 }
+
+    vRede OBJECT-TYPE
+        SYNTAX          Integer32 (0..400)
+        MAX-ACCESS      read-only
+        STATUS          current
+        DESCRIPTION     "Valor da Tensao momentanea da rede eletrica
+                         Range de 0 a 400 Volts."
+        ::= { telemetria 3 }
+		
+    vBateria OBJECT-TYPE
+        SYNTAX          Integer32 (0..100)
+        MAX-ACCESS      read-only
+        STATUS          current
+        DESCRIPTION     "Valor da Tensao da bateria
+                         Range de 0 a 100 Volts."
+        ::= { telemetria 4 }
+
+    fRede OBJECT-TYPE
+        SYNTAX          Integer32 (0..400)
+        MAX-ACCESS      read-only
+        STATUS          current
+        DESCRIPTION     "Valor da frequencia momentanea da rede eletrica
+                         Range de 0 a 100 Hz."
+        ::= { telemetria 5 }
+		
+	vAuxiliar OBJECT-TYPE
+        SYNTAX          Integer32 (0..100)
+        MAX-ACCESS      read-only
+        STATUS          current
+        DESCRIPTION     "Valor da Tensao auxiliar
+                         Range de 0 a 100 Volts."
+        ::= { telemetria 6 }
+
+-- config
+    tHoldUmidade OBJECT-TYPE
+        SYNTAX          Integer32 (0..100)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     "Valor da Tensao da bateria
+                         Range de 0 a 100%."
+        ::= { config 1 }
+
+    tHoldTemperatura OBJECT-TYPE
+        SYNTAX          Integer32 (0..100)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     "Valor da Tensao da bateria
+                         Range de 0 a 100 Celsius."
+        ::= { config 2 }
+
+    tHoldAltoRede OBJECT-TYPE
+        SYNTAX          Integer32 (0..400)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     "Valor Maximo da rede eletrica
+                         Range de 0 a 400 Volts."
+        ::= { config 3 }
+
+    tHoldBaixoRede OBJECT-TYPE
+        SYNTAX          Integer32 (0..220)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     "Valor Minimo da Tensao eletrica
+                         Range de 0 a 220 Volts."
+        ::= { config 4 }
+
+    redePadrao OBJECT-TYPE
+        SYNTAX          Integer32 (0..1)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     "Padrao da rede eletrica
+                         Range de 0 ou 1."
+        ::= { config 5 }
+
+    batterySize OBJECT-TYPE
+        SYNTAX          Integer32 (0..4)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     "Tamanho do pacote de Baterias
+                         Range de 0 a 4 packs."
+        ::= { config 6 }
+
+-- reles
+
+rele1 OBJECT-IDENTITY
+    STATUS current
+    DESCRIPTION  " "
+    ::= { reles 1 }
+
+    rele1Estado OBJECT-TYPE
+        SYNTAX          Integer32 (0..1)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     "Seta o estado do RELE
+                        0 = Desligado
+                        1 = Ligado"
+        ::= { rele1 1 } 
+
+    rele1Tipo OBJECT-TYPE
+        SYNTAX          Integer32 (0..1)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     "Modo de operacao do Rele
+                        0 = Normalmente fechado
+                        1 = Normalmente aberto."
+        ::= { rele1 2 } 
+
+    rele1Modo OBJECT-TYPE
+        SYNTAX          Integer32 (0..10)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele1 3 } 
+
+    rele1ResetInicio OBJECT-TYPE
+        SYNTAX          Integer32 (0..2500)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele1 4 } 
+
+    rele1ResetDias OBJECT-TYPE
+        SYNTAX          Integer32 (0..128)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele1 5 } 
+
+    rele1ResetDuracao OBJECT-TYPE
+        SYNTAX          Integer32 (0..1000)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele1 6 } 
+
+    rele1AgendamentoInicio OBJECT-TYPE
+        SYNTAX          Integer32 (0..2500)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele1 7 } 
+
+    rele1AgendamentoFim OBJECT-TYPE
+        SYNTAX          Integer32 (0..2500)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele1 8 } 
+
+    rele1AgendamentoDias OBJECT-TYPE
+        SYNTAX          Integer32 (0..128)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele1 9 } 
+
+    rele1TesteMeses OBJECT-TYPE
+        SYNTAX          Integer32 (0..4096)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele1 10 } 
+
+    rele1TesteDia OBJECT-TYPE
+        SYNTAX          Integer32 (0..32)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele1 11 } 
+
+    rele1TesteInicio OBJECT-TYPE
+        SYNTAX          Integer32 (0..2500)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele1 12 } 
+
+    rele1TesteDuracao OBJECT-TYPE
+        SYNTAX          Integer32 (0..100)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele1 13 } 
+
+    rele1TesteIntervalo OBJECT-TYPE
+        SYNTAX          Integer32 (1..5)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele1 14 } 
+
+    rele1TesteTipo OBJECT-TYPE
+        SYNTAX          Integer32 (0..1)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele1 15 } 
+
+
+rele2 OBJECT-IDENTITY
+    STATUS current
+    DESCRIPTION         "Configuracoes dos grupos de reles do equipamento"
+    ::= { reles 2 }
+
+    rele2Estado OBJECT-TYPE
+        SYNTAX          Integer32 (0..1)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     "Seta o estado do RELE
+                        0 = Desligado
+                        1 = Ligado"
+        ::= { rele2 1 } 
+
+    rele2Tipo OBJECT-TYPE
+        SYNTAX          Integer32 (0..1)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     "Modo de operacao do Rele
+                        0 = Normalmente fechado
+                        1 = Normalmente aberto."
+        ::= { rele2 2 } 
+
+    rele2Modo OBJECT-TYPE
+        SYNTAX          Integer32 (0..10)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele2 3 } 
+
+    rele2ResetInicio OBJECT-TYPE
+        SYNTAX          Integer32 (0..2500)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele2 4 } 
+
+    rele2ResetDias OBJECT-TYPE
+        SYNTAX          Integer32 (0..128)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele2 5 } 
+
+    rele2ResetDuracao OBJECT-TYPE
+        SYNTAX          Integer32 (0..1000)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele2 6 } 
+
+    rele2AgendamentoInicio OBJECT-TYPE
+        SYNTAX          Integer32 (0..2500)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele2 7 } 
+
+    rele2AgendamentoFim OBJECT-TYPE
+        SYNTAX          Integer32 (0..2500)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele2 8 } 
+
+    rele2AgendamentoDias OBJECT-TYPE
+        SYNTAX          Integer32 (0..128)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele2 9 } 
+
+    rele2TesteMeses OBJECT-TYPE
+        SYNTAX          Integer32 (0..4096)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele2 10 } 
+
+    rele2TesteDia OBJECT-TYPE
+        SYNTAX          Integer32 (0..32)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele2 11 } 
+
+    rele2TesteInicio OBJECT-TYPE
+        SYNTAX          Integer32 (0..2500)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele2 12 } 
+
+    rele2TesteDuracao OBJECT-TYPE
+        SYNTAX          Integer32 (0..100)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele2 13 } 
+
+    rele2TesteIntervalo OBJECT-TYPE
+        SYNTAX          Integer32 (1..5)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele2 14 } 
+
+    rele2TesteTipo OBJECT-TYPE
+        SYNTAX          Integer32 (0..1)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele2 15 } 
+
+
+rele3 OBJECT-IDENTITY
+    STATUS current
+    DESCRIPTION  " "
+    ::= { reles 3 }
+
+    rele3Estado OBJECT-TYPE
+        SYNTAX          Integer32 (0..1)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     "Seta o estado do RELE
+                        0 = Desligado
+                        1 = Ligado"
+        ::= { rele3 1 } 
+
+    rele3Tipo OBJECT-TYPE
+        SYNTAX          Integer32 (0..1)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     "Modo de operacao do Rele
+                        0 = Normalmente fechado
+                        1 = Normalmente aberto."
+        ::= { rele3 2 } 
+
+    rele3Modo OBJECT-TYPE
+        SYNTAX          Integer32 (0..10)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele3 3 } 
+
+    rele3ResetInicio OBJECT-TYPE
+        SYNTAX          Integer32 (0..2500)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele3 4 } 
+
+    rele3ResetDias OBJECT-TYPE
+        SYNTAX          Integer32 (0..128)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele3 5 } 
+
+    rele3ResetDuracao OBJECT-TYPE
+        SYNTAX          Integer32 (0..1000)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele3 6 } 
+
+    rele3AgendamentoInicio OBJECT-TYPE
+        SYNTAX          Integer32 (0..2500)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele3 7 } 
+
+    rele3AgendamentoFim OBJECT-TYPE
+        SYNTAX          Integer32 (0..2500)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele3 8 } 
+
+    rele3AgendamentoDias OBJECT-TYPE
+        SYNTAX          Integer32 (0..128)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele3 9 } 
+
+    rele3TesteMeses OBJECT-TYPE
+        SYNTAX          Integer32 (0..4096)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele3 10 } 
+
+    rele3TesteDia OBJECT-TYPE
+        SYNTAX          Integer32 (0..32)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele3 11 } 
+
+    rele3TesteInicio OBJECT-TYPE
+        SYNTAX          Integer32 (0..2500)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele3 12 } 
+
+    rele3TesteDuracao OBJECT-TYPE
+        SYNTAX          Integer32 (0..100)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele3 13 } 
+
+    rele3TesteIntervalo OBJECT-TYPE
+        SYNTAX          Integer32 (1..5)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele3 14 } 
+
+    rele3TesteTipo OBJECT-TYPE
+        SYNTAX          Integer32 (0..1)
+        MAX-ACCESS      read-write
+        STATUS          current
+        DESCRIPTION     " "
+        ::= { rele3 15 } 
+
+-- traps
+--  traps OBJECT IDENTIFIER ::= { monitory 5 }
+
+--    trapmessage OBJECT-TYPE
+--        SYNTAX              DisplayString
+--        MAX-ACCESS          read-only
+--        STATUS              current
+--        DESCRIPTION         "Eventos do sistema Monitory."
+--        ::= { traps 1 }
+
+--    evalrmRele1     NOTIFICATION-TYPE
+--        STATUS              current
+--        DESCRIPTION         "Estado do RELE 1 alterado."
+--        ::= { alarmes 1 }
+
+--    evalrmRele2     NOTIFICATION-TYPE
+--        STATUS              current
+--        DESCRIPTION         "Estado do RELE 2 alterado."
+--        ::= { alarmes 2 }
+
+--    evalrmRele3     	NOTIFICATION-TYPE
+--        STATUS              current
+--        DESCRIPTION         "Estado do RELE 3 alterado."
+--        ::= { alarmes 3 }
+
+    evalrmBateria   	NOTIFICATION-TYPE
+        STATUS              current
+        DESCRIPTION         "Alarme por falha na bateria."
+        ::= { alarmes 1 }
+
+    evalrmRede     		NOTIFICATION-TYPE
+        STATUS              current
+        DESCRIPTION         "Falha na rede eletrica."
+        ::= { alarmes 2 }
+
+    evalrmFumaca     	NOTIFICATION-TYPE
+        STATUS              current
+        DESCRIPTION         "Presenca de fumaca."
+        ::= { alarmes 3 }
+
+    evalrmLastGasp     	NOTIFICATION-TYPE
+        STATUS              current
+        DESCRIPTION         " "
+        ::= { alarmes 4 }
+
+    evalrmTemperatura   NOTIFICATION-TYPE
+        STATUS              current
+        DESCRIPTION         "Alarme de temperatura."
+        ::= { alarmes 5 }
+
+    evalrmUmidade     	NOTIFICATION-TYPE
+        STATUS              current
+        DESCRIPTION         "Alarme de umidade."
+        ::= { alarmes 6 }
+
+END
